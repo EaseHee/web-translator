@@ -92,8 +92,16 @@ fork 并自行发布时,请将 URL 中的用户名替换为你自己的 GitHub �
 | `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow 值 |
 | `data-focus-color` | `#4f8cff` | 聚焦 outline 颜色 |
 | `data-focus-width` | `2px` | 聚焦 outline 宽度 |
-| `data-arrow` | 内置 SVG | 箭头 background-image (`url(...)`) |
+| `data-arrow` | 内置 SVG | 箭头 background-image (`url(...)`)。设为 `none` 可隐藏箭头 |
 | `data-arrow-position` | `right 8px center` | 箭头位置 |
+| `data-arrow-size` | `10px 6px` | 箭头大小 (CSS `background-size` 值) |
+| `data-show-arrow` | `true` | 设为 `false` 同时移除箭头与右内边距 |
+| `data-display` | `block` | 挂件容器 `display` 值 |
+| `data-hidden` | `false` | 设为 `true` 隐藏挂件,翻译功能仍保留 |
+| `data-width` | `auto` | 下拉框宽度 (如 `160px`, `100%`) |
+| `data-min-width` | `0` | 下拉框最小宽度 |
+| `data-max-width` | `none` | 下拉框最大宽度 |
+| `data-height` | `auto` | 下拉框高度 |
 | `data-busy-opacity` | `.6` | 翻译进行时的 select 透明度 |
 | `data-transition` | 颜色过渡 | CSS transition 值 |
 

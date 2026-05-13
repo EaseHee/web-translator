@@ -92,8 +92,16 @@ fork して自身で配信する場合は、URL 内のユーザー名をご自�
 | `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow 値 |
 | `data-focus-color` | `#4f8cff` | フォーカス outline 色 |
 | `data-focus-width` | `2px` | フォーカス outline 太さ |
-| `data-arrow` | 組み込み SVG | 矢印の background-image (`url(...)`) |
+| `data-arrow` | 組み込み SVG | 矢印の background-image (`url(...)`)。`none` 指定で矢印を非表示 |
 | `data-arrow-position` | `right 8px center` | 矢印位置 |
+| `data-arrow-size` | `10px 6px` | 矢印サイズ (CSS `background-size` 値) |
+| `data-show-arrow` | `true` | `false` 指定で矢印と右パディングを同時に除去 |
+| `data-display` | `block` | ウィジェットコンテナの `display` 値 |
+| `data-hidden` | `false` | `true` 指定でウィジェット非表示。翻訳機能は維持 |
+| `data-width` | `auto` | ドロップダウンの幅 (例: `160px`, `100%`) |
+| `data-min-width` | `0` | ドロップダウンの最小幅 |
+| `data-max-width` | `none` | ドロップダウンの最大幅 |
+| `data-height` | `auto` | ドロップダウンの高さ |
 | `data-busy-opacity` | `.6` | 翻訳中の select 透明度 |
 | `data-transition` | 色トランジション | CSS transition 値 |
 

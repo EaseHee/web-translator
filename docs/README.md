@@ -92,8 +92,16 @@ fork하여 자체 배포하실 때에는 본인의 GitHub 사용자명이나 기
 | `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow 값 |
 | `data-focus-color` | `#4f8cff` | 포커스 outline 색 |
 | `data-focus-width` | `2px` | 포커스 outline 두께 |
-| `data-arrow` | 내장 SVG | 화살표 background-image (url 값) |
+| `data-arrow` | 내장 SVG | 화살표 background-image (url 값). `none` 설정 시 화살표 제거 |
 | `data-arrow-position` | `right 8px center` | 화살표 위치 |
+| `data-arrow-size` | `10px 6px` | 화살표 크기 (CSS background-size 값) |
+| `data-show-arrow` | `true` | `false` 지정 시 화살표·우측 패딩 동시 제거 |
+| `data-display` | `block` | 위젯 컨테이너 display 값 |
+| `data-hidden` | `false` | `true` 지정 시 위젯 비표시. 번역 기능은 유지하며 외부에서 select 노출만 차단 시 유용 |
+| `data-width` | `auto` | 드롭박스 너비 (예: `160px`, `100%`) |
+| `data-min-width` | `0` | 드롭박스 최소 너비 |
+| `data-max-width` | `none` | 드롭박스 최대 너비 |
+| `data-height` | `auto` | 드롭박스 높이 |
 | `data-busy-opacity` | `.6` | 번역 진행 중 select 투명도 |
 | `data-transition` | 색상 트랜지션 | CSS transition 속성 |
 

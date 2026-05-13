@@ -24,8 +24,9 @@ const VAR_DATA_KEYS = [
   'paddingY', 'paddingLeft', 'paddingRight',
   'shadow',
   'focusColor', 'focusWidth',
-  'arrow', 'arrowPosition',
+  'arrow', 'arrowPosition', 'arrowSize',
   'busyOpacity', 'transition',
+  'display', 'width', 'minWidth', 'maxWidth', 'height',
 ];
 
 function camelToKebab(s) {
@@ -49,6 +50,8 @@ function readConfig() {
     theme: d.theme || 'auto',
     vars,
     rawStyle: d.style || '',
+    showArrow: d.showArrow !== 'false',
+    hidden: d.hidden === 'true',
   };
 }
 
@@ -143,6 +146,8 @@ function start() {
     theme: cfg.theme,
     vars: cfg.vars,
     rawStyle: cfg.rawStyle,
+    showArrow: cfg.showArrow,
+    hidden: cfg.hidden,
   });
 
   watch(document.body, async (added) => {

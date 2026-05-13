@@ -92,8 +92,16 @@ Supported keys (values are passed straight through as CSS length / color / strin
 | `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow value |
 | `data-focus-color` | `#4f8cff` | Focus outline color |
 | `data-focus-width` | `2px` | Focus outline width |
-| `data-arrow` | built-in SVG | Arrow background-image (`url(...)`) |
+| `data-arrow` | built-in SVG | Arrow background-image (`url(...)`). Set to `none` to remove the arrow |
 | `data-arrow-position` | `right 8px center` | Arrow position |
+| `data-arrow-size` | `10px 6px` | Arrow size (CSS `background-size` value) |
+| `data-show-arrow` | `true` | Set `false` to remove both the arrow and the right padding reserved for it |
+| `data-display` | `block` | Container `display` value |
+| `data-hidden` | `false` | Set `true` to hide the widget entirely while keeping translation behavior |
+| `data-width` | `auto` | Dropdown width (e.g. `160px`, `100%`) |
+| `data-min-width` | `0` | Dropdown minimum width |
+| `data-max-width` | `none` | Dropdown maximum width |
+| `data-height` | `auto` | Dropdown height |
 | `data-busy-opacity` | `.6` | Opacity while translating |
 | `data-transition` | color transitions | CSS transition value |
 

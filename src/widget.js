@@ -44,15 +44,23 @@ const STYLE = `
   --wt-focus-width: 2px;
   --wt-arrow: ${ARROW_LIGHT};
   --wt-arrow-position: right 8px center;
+  --wt-arrow-size: 10px 6px;
   --wt-busy-opacity: .6;
   --wt-transition: background-color .15s, color .15s, border-color .15s;
+  --wt-display: block;
+  --wt-width: auto;
+  --wt-min-width: 0;
+  --wt-max-width: none;
+  --wt-height: auto;
 
   position: fixed;
   z-index: var(--wt-z-index);
   font-family: var(--wt-font-family);
   font-size: var(--wt-font-size);
   line-height: var(--wt-line-height);
+  display: var(--wt-display);
 }
+#wt-widget.wt-hidden { display: none !important; }
 #wt-widget.wt-top-right    { top: var(--wt-offset-y);    right: var(--wt-offset-x); }
 #wt-widget.wt-top-left     { top: var(--wt-offset-y);    left: var(--wt-offset-x); }
 #wt-widget.wt-bottom-right { bottom: var(--wt-offset-y); right: var(--wt-offset-x); }
@@ -82,7 +90,17 @@ const STYLE = `
   background-image: var(--wt-arrow);
   background-repeat: no-repeat;
   background-position: var(--wt-arrow-position);
+  background-size: var(--wt-arrow-size);
   transition: var(--wt-transition);
+  width: var(--wt-width);
+  min-width: var(--wt-min-width);
+  max-width: var(--wt-max-width);
+  height: var(--wt-height);
+  box-sizing: border-box;
+}
+#wt-widget.wt-no-arrow select {
+  background-image: none;
+  padding-right: var(--wt-padding-left);
 }
 #wt-widget select:focus {
   outline: var(--wt-focus-width) solid var(--wt-focus-color);
@@ -123,8 +141,9 @@ const VAR_KEYS = new Set([
   'padding-y', 'padding-left', 'padding-right',
   'shadow',
   'focus-color', 'focus-width',
-  'arrow', 'arrow-position',
+  'arrow', 'arrow-position', 'arrow-size',
   'busy-opacity', 'transition',
+  'display', 'width', 'min-width', 'max-width', 'height',
 ]);
 
 function labelFor(code) {
@@ -159,6 +178,8 @@ export function mount({
   theme,
   vars,
   rawStyle,
+  showArrow,
+  hidden,
 }) {
   if (document.getElementById('wt-widget')) return null;
 
@@ -177,6 +198,8 @@ export function mount({
   if (theme === 'light' || theme === 'dark') {
     container.classList.add('wt-theme-' + theme);
   }
+  if (showArrow === false) container.classList.add('wt-no-arrow');
+  if (hidden) container.classList.add('wt-hidden');
 
   applyInlineVars(container, vars);
   applyRawStyle(container, rawStyle);
@@ -207,6 +230,9 @@ export function mount({
     },
     setLang(l) {
       select.value = l;
+    },
+    setHidden(h) {
+      container.classList.toggle('wt-hidden', !!h);
     },
   };
 }
