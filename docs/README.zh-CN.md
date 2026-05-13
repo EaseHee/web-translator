@@ -42,9 +42,99 @@ fork 并自行发布时,请将 URL 中的用户名替换为你自己的 GitHub �
 |---|---|---|
 | `data-langs` | `en,ja,zh-CN` | 下拉显示的语言(逗号分隔的 BCP-47 代码) |
 | `data-default` | `<html lang>` 或 `auto` | 页面原文语言 |
-| `data-position` | `top-right` | 挂件位置: `top-right` / `top-left` / `bottom-right` / `bottom-left` |
+| `data-position` | `top-right` | 挂件位置: `top-right` / `top-left` / `top-center` / `bottom-right` / `bottom-left` / `bottom-center` |
 | `data-auto` | `false` | 为 `true` 时根据浏览器语言自动翻译 |
 | `data-concurrency` | `4` | 并发翻译请求上限 |
+| `data-theme` | `auto` | 强制主题:`auto` / `light` / `dark`。`auto` 跟随系统设置 |
+
+
+## 下拉框样式与位置精细调整
+
+挂件外观和位置可通过两种方式调整,可同时使用。优先级:内联 `data-*` 属性 > `data-style` > 外部 CSS override。
+
+### 1) data-* 内联选项
+
+将常用属性直接写在脚本标签上。
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/EaseHee/web-translator@1/dist/translate.min.js"
+  data-position="bottom-center"
+  data-offset-x="24px"
+  data-offset-y="20px"
+  data-theme="dark"
+  data-font-size="13px"
+  data-radius="10px"
+  data-bg="#0b1220"
+  data-color="#e5e7eb"
+  data-border-color="#1f2937"
+  data-shadow="0 4px 12px rgba(0,0,0,.3)"
+  defer></script>
+```
+
+支持的 data-* 键(取值按 CSS 长度 / 颜色 / 字符串原样传入)。
+
+| 键 | 默认值 | 说明 |
+|---|---|---|
+| `data-offset-x` | `12px` | 距屏幕边缘的水平距离 |
+| `data-offset-y` | `12px` | 距屏幕边缘的垂直距离 |
+| `data-z-index` | `2147483647` | 挂件的 z-index |
+| `data-font-family` | 系统字体 | 字体族 |
+| `data-font-size` | `14px` | 字号 |
+| `data-line-height` | `1.4` | 行高 |
+| `data-color` | `#222`(浅色) | 文字颜色 |
+| `data-bg` | `#fff`(浅色) | 背景色 |
+| `data-border-color` | `#d0d0d0`(浅色) | 边框色 |
+| `data-border-width` | `1px` | 边框宽度 |
+| `data-radius` | `6px` | 圆角半径 |
+| `data-padding-y` | `6px` | 上下内边距 |
+| `data-padding-left` | `10px` | 左内边距 |
+| `data-padding-right` | `26px` | 右内边距(含箭头区域) |
+| `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow 值 |
+| `data-focus-color` | `#4f8cff` | 聚焦 outline 颜色 |
+| `data-focus-width` | `2px` | 聚焦 outline 宽度 |
+| `data-arrow` | 内置 SVG | 箭头 background-image (`url(...)`) |
+| `data-arrow-position` | `right 8px center` | 箭头位置 |
+| `data-busy-opacity` | `.6` | 翻译进行时的 select 透明度 |
+| `data-transition` | 颜色过渡 | CSS transition 值 |
+
+### 2) data-style 批量指定
+
+按 CSS 变量声明的形式整段传入。
+
+```html
+<script src="...translate.min.js"
+  data-style="--wt-radius:12px;--wt-shadow:none;--wt-padding-y:8px"
+  defer></script>
+```
+
+### 3) 外部 CSS 变量 override
+
+在宿主页面的 CSS 中通过 `#wt-widget` 选择器覆盖变量。
+
+```html
+<style>
+#wt-widget {
+  --wt-offset-x: 24px;
+  --wt-offset-y: 20px;
+  --wt-radius: 12px;
+  --wt-bg: #111;
+  --wt-color: #fff;
+  --wt-border-color: transparent;
+  --wt-shadow: 0 6px 16px rgba(0,0,0,.4);
+}
+</style>
+```
+
+针对深色模式可结合 `prefers-color-scheme` 媒体查询自定义。
+
+```css
+@media (prefers-color-scheme: dark) {
+  #wt-widget:not(.wt-theme-light) {
+    --wt-bg: #000;
+    --wt-color: #fff;
+  }
+}
+```
 
 
 ## 排除翻译

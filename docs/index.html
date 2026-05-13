@@ -69,6 +69,43 @@
   data-auto="false"
   defer&gt;&lt;/script&gt;</code></pre>
 
+  <h2>스타일·위치 상세 조정</h2>
+  <p>위젯 외관은 두 가지 방법으로 조정 가능. 둘 다 함께 사용 가능하며 우선순위는 inline data 속성 &gt; CSS 변수 override.</p>
+
+  <h3>1. data-* 인라인 옵션</h3>
+  <pre><code>&lt;script src="...translate.min.js"
+  data-position="bottom-center"
+  data-offset-x="24px"
+  data-offset-y="20px"
+  data-theme="dark"
+  data-font-size="13px"
+  data-radius="10px"
+  data-bg="#0b1220"
+  data-color="#e5e7eb"
+  data-border-color="#1f2937"
+  data-shadow="0 4px 12px rgba(0,0,0,.3)"
+  defer&gt;&lt;/script&gt;</code></pre>
+
+  <p>지원 키: <code>position</code>(top-right · top-left · top-center · bottom-right · bottom-left · bottom-center), <code>theme</code>(auto · light · dark), <code>offset-x</code>, <code>offset-y</code>, <code>z-index</code>, <code>font-family</code>, <code>font-size</code>, <code>line-height</code>, <code>color</code>, <code>bg</code>, <code>border-color</code>, <code>border-width</code>, <code>radius</code>, <code>padding-y</code>, <code>padding-left</code>, <code>padding-right</code>, <code>shadow</code>, <code>focus-color</code>, <code>focus-width</code>, <code>arrow</code>, <code>arrow-position</code>, <code>busy-opacity</code>, <code>transition</code>.</p>
+
+  <p>여러 변수를 한 번에 지정할 때는 <code>data-style</code> 사용 가능. CSS 변수 선언 형식 그대로 입력.</p>
+  <pre><code>&lt;script src="...translate.min.js"
+  data-style="--wt-radius:12px;--wt-shadow:none;--wt-padding-y:8px"
+  defer&gt;&lt;/script&gt;</code></pre>
+
+  <h3>2. CSS 변수 override</h3>
+  <pre><code>&lt;style&gt;
+#wt-widget {
+  --wt-offset-x: 24px;
+  --wt-offset-y: 20px;
+  --wt-radius: 12px;
+  --wt-bg: #111;
+  --wt-color: #fff;
+  --wt-border-color: transparent;
+  --wt-shadow: 0 6px 16px rgba(0,0,0,.4);
+}
+&lt;/style&gt;</code></pre>
+
   <h2>SPA 검증</h2>
   <p>아래 버튼을 누르면 0.5초 뒤에 새 문단이 동적으로 삽입됨. 비-원문 언어 상태라면 추가된 문단도 자동 번역.</p>
   <button id="add-btn" type="button" data-no-translate>문단 추가</button>

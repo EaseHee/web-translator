@@ -42,9 +42,99 @@ When you fork and self-publish, replace the username in the URL with your own Gi
 |---|---|---|
 | `data-langs` | `en,ja,zh-CN` | Languages shown in the dropdown (comma-separated BCP-47 codes) |
 | `data-default` | `<html lang>` or `auto` | Source language of the page |
-| `data-position` | `top-right` | Widget position: `top-right` / `top-left` / `bottom-right` / `bottom-left` |
+| `data-position` | `top-right` | Widget position: `top-right` / `top-left` / `top-center` / `bottom-right` / `bottom-left` / `bottom-center` |
 | `data-auto` | `false` | If `true`, detects browser language and auto-translates |
 | `data-concurrency` | `4` | Maximum number of concurrent translation requests |
+| `data-theme` | `auto` | Force theme: `auto` / `light` / `dark`. `auto` follows the system setting |
+
+
+## Styling and positioning
+
+The widget appearance and position can be tuned in two ways, used together if needed. Priority order: inline `data-*` attributes > `data-style` > external CSS overrides.
+
+### 1) Inline data-* options
+
+Set common properties directly on the script tag.
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/EaseHee/web-translator@1/dist/translate.min.js"
+  data-position="bottom-center"
+  data-offset-x="24px"
+  data-offset-y="20px"
+  data-theme="dark"
+  data-font-size="13px"
+  data-radius="10px"
+  data-bg="#0b1220"
+  data-color="#e5e7eb"
+  data-border-color="#1f2937"
+  data-shadow="0 4px 12px rgba(0,0,0,.3)"
+  defer></script>
+```
+
+Supported keys (values are passed straight through as CSS length / color / string).
+
+| Key | Default | Description |
+|---|---|---|
+| `data-offset-x` | `12px` | Horizontal distance from the edge |
+| `data-offset-y` | `12px` | Vertical distance from the edge |
+| `data-z-index` | `2147483647` | Widget z-index |
+| `data-font-family` | system stack | Font family |
+| `data-font-size` | `14px` | Font size |
+| `data-line-height` | `1.4` | Line height |
+| `data-color` | `#222` (light) | Text color |
+| `data-bg` | `#fff` (light) | Background color |
+| `data-border-color` | `#d0d0d0` (light) | Border color |
+| `data-border-width` | `1px` | Border width |
+| `data-radius` | `6px` | Corner radius |
+| `data-padding-y` | `6px` | Vertical padding |
+| `data-padding-left` | `10px` | Left padding |
+| `data-padding-right` | `26px` | Right padding (includes arrow area) |
+| `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow value |
+| `data-focus-color` | `#4f8cff` | Focus outline color |
+| `data-focus-width` | `2px` | Focus outline width |
+| `data-arrow` | built-in SVG | Arrow background-image (`url(...)`) |
+| `data-arrow-position` | `right 8px center` | Arrow position |
+| `data-busy-opacity` | `.6` | Opacity while translating |
+| `data-transition` | color transitions | CSS transition value |
+
+### 2) `data-style` for multiple variables
+
+Provide raw CSS variable declarations.
+
+```html
+<script src="...translate.min.js"
+  data-style="--wt-radius:12px;--wt-shadow:none;--wt-padding-y:8px"
+  defer></script>
+```
+
+### 3) External CSS variable overrides
+
+Override variables in your own stylesheet via the `#wt-widget` selector.
+
+```html
+<style>
+#wt-widget {
+  --wt-offset-x: 24px;
+  --wt-offset-y: 20px;
+  --wt-radius: 12px;
+  --wt-bg: #111;
+  --wt-color: #fff;
+  --wt-border-color: transparent;
+  --wt-shadow: 0 6px 16px rgba(0,0,0,.4);
+}
+</style>
+```
+
+Customize the dark variant via the `prefers-color-scheme` media query.
+
+```css
+@media (prefers-color-scheme: dark) {
+  #wt-widget:not(.wt-theme-light) {
+    --wt-bg: #000;
+    --wt-color: #fff;
+  }
+}
+```
 
 
 ## Excluding content

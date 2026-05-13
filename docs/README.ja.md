@@ -42,9 +42,99 @@ fork して自身で配信する場合は、URL 内のユーザー名をご自�
 |---|---|---|
 | `data-langs` | `en,ja,zh-CN` | ドロップダウンに表示する言語(カンマ区切り、BCP-47 コード) |
 | `data-default` | `<html lang>` または `auto` | ページの原文言語 |
-| `data-position` | `top-right` | ウィジェット位置: `top-right` / `top-left` / `bottom-right` / `bottom-left` |
+| `data-position` | `top-right` | ウィジェット位置: `top-right` / `top-left` / `top-center` / `bottom-right` / `bottom-left` / `bottom-center` |
 | `data-auto` | `false` | `true` の場合ブラウザの言語を検出して自動翻訳 |
 | `data-concurrency` | `4` | 同時翻訳リクエスト数の上限 |
+| `data-theme` | `auto` | テーマ強制指定: `auto` / `light` / `dark`。`auto` はシステム設定に追従 |
+
+
+## ドロップダウンのスタイル・位置の詳細調整
+
+ウィジェットの外観と位置は 2 通りの方法で調整可能。併用可。優先順位は インライン `data-*` > `data-style` > 外部 CSS override。
+
+### 1) data-* インラインオプション
+
+よく使う項目をスクリプトタグに直接指定。
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/EaseHee/web-translator@1/dist/translate.min.js"
+  data-position="bottom-center"
+  data-offset-x="24px"
+  data-offset-y="20px"
+  data-theme="dark"
+  data-font-size="13px"
+  data-radius="10px"
+  data-bg="#0b1220"
+  data-color="#e5e7eb"
+  data-border-color="#1f2937"
+  data-shadow="0 4px 12px rgba(0,0,0,.3)"
+  defer></script>
+```
+
+対応する data-* キー(値は CSS の長さ / 色 / 文字列をそのまま渡せます)。
+
+| キー | 既定値 | 説明 |
+|---|---|---|
+| `data-offset-x` | `12px` | 画面端からの水平距離 |
+| `data-offset-y` | `12px` | 画面端からの垂直距離 |
+| `data-z-index` | `2147483647` | ウィジェットの z-index |
+| `data-font-family` | システムフォント | フォントファミリ |
+| `data-font-size` | `14px` | フォントサイズ |
+| `data-line-height` | `1.4` | 行間 |
+| `data-color` | `#222` (ライト) | 文字色 |
+| `data-bg` | `#fff` (ライト) | 背景色 |
+| `data-border-color` | `#d0d0d0` (ライト) | 枠線色 |
+| `data-border-width` | `1px` | 枠線太さ |
+| `data-radius` | `6px` | 角丸半径 |
+| `data-padding-y` | `6px` | 上下パディング |
+| `data-padding-left` | `10px` | 左パディング |
+| `data-padding-right` | `26px` | 右パディング(矢印領域込み) |
+| `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow 値 |
+| `data-focus-color` | `#4f8cff` | フォーカス outline 色 |
+| `data-focus-width` | `2px` | フォーカス outline 太さ |
+| `data-arrow` | 組み込み SVG | 矢印の background-image (`url(...)`) |
+| `data-arrow-position` | `right 8px center` | 矢印位置 |
+| `data-busy-opacity` | `.6` | 翻訳中の select 透明度 |
+| `data-transition` | 色トランジション | CSS transition 値 |
+
+### 2) data-style でまとめて指定
+
+CSS 変数宣言形式の文字列をそのまま渡す。
+
+```html
+<script src="...translate.min.js"
+  data-style="--wt-radius:12px;--wt-shadow:none;--wt-padding-y:8px"
+  defer></script>
+```
+
+### 3) 外部 CSS による変数 override
+
+ホストページの CSS で `#wt-widget` セレクタにより変数を上書き。
+
+```html
+<style>
+#wt-widget {
+  --wt-offset-x: 24px;
+  --wt-offset-y: 20px;
+  --wt-radius: 12px;
+  --wt-bg: #111;
+  --wt-color: #fff;
+  --wt-border-color: transparent;
+  --wt-shadow: 0 6px 16px rgba(0,0,0,.4);
+}
+</style>
+```
+
+ダーク表示のカスタマイズは `prefers-color-scheme` メディアクエリと組み合わせ。
+
+```css
+@media (prefers-color-scheme: dark) {
+  #wt-widget:not(.wt-theme-light) {
+    --wt-bg: #000;
+    --wt-color: #fff;
+  }
+}
+```
 
 
 ## 翻訳対象外

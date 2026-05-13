@@ -15,15 +15,40 @@ let currentTarget = null;
 let cfg = null;
 let ui = null;
 
+const VAR_DATA_KEYS = [
+  'offsetX', 'offsetY', 'zIndex',
+  'fontFamily', 'fontSize', 'lineHeight',
+  'color', 'bg',
+  'borderColor', 'borderWidth',
+  'radius',
+  'paddingY', 'paddingLeft', 'paddingRight',
+  'shadow',
+  'focusColor', 'focusWidth',
+  'arrow', 'arrowPosition',
+  'busyOpacity', 'transition',
+];
+
+function camelToKebab(s) {
+  return s.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+}
+
 function readConfig() {
   const d = (SCRIPT_EL && SCRIPT_EL.dataset) || {};
   const htmlLang = (document.documentElement.getAttribute('lang') || '').split('-')[0] || 'auto';
+  const vars = {};
+  for (const key of VAR_DATA_KEYS) {
+    const v = d[key];
+    if (v != null && v !== '') vars[camelToKebab(key)] = v;
+  }
   return {
     langs: (d.langs || 'en,ja,zh-CN').split(',').map((s) => s.trim()).filter(Boolean),
     defaultLang: d.default || htmlLang || 'auto',
     position: d.position || 'top-right',
     auto: d.auto === 'true',
     concurrency: Math.max(1, parseInt(d.concurrency || '4', 10)),
+    theme: d.theme || 'auto',
+    vars,
+    rawStyle: d.style || '',
   };
 }
 
@@ -115,6 +140,9 @@ function start() {
     defaultLang: cfg.defaultLang,
     langs: cfg.langs,
     onChange: applyTarget,
+    theme: cfg.theme,
+    vars: cfg.vars,
+    rawStyle: cfg.rawStyle,
   });
 
   watch(document.body, async (added) => {

@@ -42,9 +42,99 @@ fork하여 자체 배포하실 때에는 본인의 GitHub 사용자명이나 기
 |---|---|---|
 | `data-langs` | `en,ja,zh-CN` | 드롭다운 표시 언어 목록 (쉼표 구분, BCP-47 코드) |
 | `data-default` | `<html lang>` 값 또는 `auto` | 페이지 원본 언어 |
-| `data-position` | `top-right` | 위젯 위치. `top-right` / `top-left` / `bottom-right` / `bottom-left` |
+| `data-position` | `top-right` | 위젯 위치. `top-right` / `top-left` / `top-center` / `bottom-right` / `bottom-left` / `bottom-center` |
 | `data-auto` | `false` | `true` 시 브라우저 언어 감지 후 자동 번역 시도 |
 | `data-concurrency` | `4` | 동시 번역 요청 개수 상한 |
+| `data-theme` | `auto` | 테마 강제. `auto` / `light` / `dark`. `auto`는 시스템 설정 추종 |
+
+
+## 드롭다운 스타일·위치 상세 조정
+
+위젯 외관과 위치를 두 방식으로 조정 가능. 둘 다 동시 사용 가능. 우선순위는 `data-*` 인라인 속성 > `data-style` > 외부 CSS override.
+
+### 1) data-* 인라인 옵션
+
+자주 쓰는 항목을 스크립트 태그에 직접 지정.
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/EaseHee/web-translator@1/dist/translate.min.js"
+  data-position="bottom-center"
+  data-offset-x="24px"
+  data-offset-y="20px"
+  data-theme="dark"
+  data-font-size="13px"
+  data-radius="10px"
+  data-bg="#0b1220"
+  data-color="#e5e7eb"
+  data-border-color="#1f2937"
+  data-shadow="0 4px 12px rgba(0,0,0,.3)"
+  defer></script>
+```
+
+지원하는 data-* 키 (모두 CSS 길이·색·문자열 그대로 입력).
+
+| 키 | 기본값 | 설명 |
+|---|---|---|
+| `data-offset-x` | `12px` | 화면 가장자리로부터 가로 거리 |
+| `data-offset-y` | `12px` | 화면 가장자리로부터 세로 거리 |
+| `data-z-index` | `2147483647` | 위젯 z-index |
+| `data-font-family` | 시스템 폰트 | 글꼴 패밀리 |
+| `data-font-size` | `14px` | 글자 크기 |
+| `data-line-height` | `1.4` | 줄 간격 |
+| `data-color` | `#222` (라이트) | 글자 색 |
+| `data-bg` | `#fff` (라이트) | 배경 색 |
+| `data-border-color` | `#d0d0d0` (라이트) | 테두리 색 |
+| `data-border-width` | `1px` | 테두리 두께 |
+| `data-radius` | `6px` | 모서리 반경 |
+| `data-padding-y` | `6px` | 상하 패딩 |
+| `data-padding-left` | `10px` | 좌측 패딩 |
+| `data-padding-right` | `26px` | 우측 패딩 (화살표 영역 포함) |
+| `data-shadow` | `0 1px 3px rgba(0,0,0,.08)` | box-shadow 값 |
+| `data-focus-color` | `#4f8cff` | 포커스 outline 색 |
+| `data-focus-width` | `2px` | 포커스 outline 두께 |
+| `data-arrow` | 내장 SVG | 화살표 background-image (url 값) |
+| `data-arrow-position` | `right 8px center` | 화살표 위치 |
+| `data-busy-opacity` | `.6` | 번역 진행 중 select 투명도 |
+| `data-transition` | 색상 트랜지션 | CSS transition 속성 |
+
+### 2) data-style로 여러 변수 한 번에
+
+CSS 변수 선언 형식 문자열 그대로 입력.
+
+```html
+<script src="...translate.min.js"
+  data-style="--wt-radius:12px;--wt-shadow:none;--wt-padding-y:8px"
+  defer></script>
+```
+
+### 3) 외부 CSS 변수 override
+
+호스트 페이지 CSS에서 `#wt-widget` 선택자로 변수 덮어쓰기.
+
+```html
+<style>
+#wt-widget {
+  --wt-offset-x: 24px;
+  --wt-offset-y: 20px;
+  --wt-radius: 12px;
+  --wt-bg: #111;
+  --wt-color: #fff;
+  --wt-border-color: transparent;
+  --wt-shadow: 0 6px 16px rgba(0,0,0,.4);
+}
+</style>
+```
+
+다크 모드 사용자 정의는 `prefers-color-scheme` 미디어 쿼리와 함께 사용.
+
+```css
+@media (prefers-color-scheme: dark) {
+  #wt-widget:not(.wt-theme-light) {
+    --wt-bg: #000;
+    --wt-color: #fff;
+  }
+}
+```
 
 
 ## 번역 제외 처리
