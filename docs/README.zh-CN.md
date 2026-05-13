@@ -195,10 +195,23 @@ npm run serve       # 在本地以 http://localhost:9630 提供 docs/
 
 1. 修改 `src/` 后执行 `npm run build`
 2. 连同 `dist/translate.min.js` 一并提交并推送
-3. 打 tag 发布: `git tag v1.0.0 && git push --tags`
-4. jsDelivr 会自动缓存 GitHub tag,`@1`、`@1.0.0`、`@latest` URL 立即可用
+3. 推送发布 tag
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+4. `release.yml` 工作流自动运行
+   - 以 tag 对应的源代码重新构建
+   - `package.json` 版本与 tag 不一致时给出警告
+   - 自动创建 GitHub Release(自动生成 release notes,自动识别 prerelease)
+   - 附加 `translate.min.js`、`translate-<tag>.min.js`、`SHA256SUMS` 资产
+5. jsDelivr 会自动缓存 GitHub tag,`@1`、`@1.0.0`、`@latest` URL 立即可用
 
-`build.yml` GitHub Action 会在 main 分支推送时自动构建并提交 `dist/`。
+手动触发: GitHub Actions → `release` → `Run workflow` → 输入 tag。
+
+`build.yml` 在 main 推送时自动构建并提交 `dist/`,`pages.yml` 在 `docs/` 或 `dist/` 变化时自动部署 GitHub Pages。
+
+Tag 命名规则: `v<major>.<minor>.<patch>`(例如 `v1.0.0`)。`v1.0.0-beta.1`、`v1.0.0-rc.1` 等形式会被自动标记为 prerelease。
 
 
 ## 密钥管理

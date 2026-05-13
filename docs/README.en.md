@@ -195,10 +195,23 @@ npm run serve       # serves docs/ at http://localhost:9630
 
 1. Edit sources in `src/`, then `npm run build`
 2. Commit and push including `dist/translate.min.js`
-3. Tag a release: `git tag v1.0.0 && git push --tags`
-4. jsDelivr automatically caches GitHub tags. `@1`, `@1.0.0`, and `@latest` URLs become available immediately.
+3. Push a release tag
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+4. The `release.yml` workflow runs automatically:
+   - Re-builds from the tagged source
+   - Warns if `package.json` version differs from the tag
+   - Creates a GitHub Release with auto-generated notes and automatic prerelease detection
+   - Attaches `translate.min.js`, `translate-<tag>.min.js`, and `SHA256SUMS`
+5. jsDelivr automatically caches GitHub tags. `@1`, `@1.0.0`, and `@latest` URLs become available immediately.
 
-The `build.yml` GitHub Action auto-builds and commits `dist/` on every push to `main`.
+Manual run: GitHub Actions → `release` → `Run workflow` → enter the tag.
+
+`build.yml` auto-builds and commits `dist/` on every push to `main`. `pages.yml` deploys to GitHub Pages whenever `docs/` or `dist/` changes.
+
+Tag naming: `v<major>.<minor>.<patch>` (e.g. `v1.0.0`). Tags like `v1.0.0-beta.1`, `v1.0.0-rc.1` are flagged as prereleases automatically.
 
 
 ## Secrets

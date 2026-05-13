@@ -195,10 +195,23 @@ npm run serve       # docs/ をローカル配信 (http://localhost:9630)
 
 1. `src/` を編集して `npm run build`
 2. `dist/translate.min.js` を含めてコミットおよびプッシュ
-3. リリース時にタグ付与: `git tag v1.0.0 && git push --tags`
-4. jsDelivr が GitHub タグを自動キャッシュ。`@1`、`@1.0.0`、`@latest` URL が即時利用可能。
+3. リリースタグを push
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+4. `release.yml` ワークフローが自動実行
+   - タグ時点のソースで再ビルド
+   - `package.json` のバージョンとタグが不一致の場合は警告
+   - GitHub Release 自動生成(リリースノート自動生成、prerelease 自動判定)
+   - `translate.min.js`、`translate-<tag>.min.js`、`SHA256SUMS` を資産として添付
+5. jsDelivr が GitHub タグを自動キャッシュ。`@1`、`@1.0.0`、`@latest` URL が即時利用可能。
 
-`build.yml` GitHub Action が main プッシュ時に自動ビルドおよび `dist/` のコミットを行います。
+手動実行: GitHub Actions → `release` → `Run workflow` → タグを入力。
+
+`build.yml` は main プッシュ時に自動ビルドおよび `dist/` コミット、`pages.yml` は `docs/` または `dist/` 変更時に GitHub Pages へ自動デプロイ。
+
+タグ命名規則: `v<major>.<minor>.<patch>`(例: `v1.0.0`)。`v1.0.0-beta.1`、`v1.0.0-rc.1` のような形式は自動的に prerelease として処理。
 
 
 ## シークレット管理

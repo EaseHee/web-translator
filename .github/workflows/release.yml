@@ -1,0 +1,91 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v1.0.1)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "name=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+            echo "ref=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+            echo "ref=${GITHUB_REF}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Detect prerelease
+        id: meta
+        run: |
+          name="${{ steps.tag.outputs.name }}"
+          if [[ "$name" =~ -(alpha|beta|rc|next|pre) ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.tag.outputs.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci || npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify version match
+        run: |
+          tag="${{ steps.tag.outputs.name }}"
+          tag_ver="${tag#v}"
+          pkg_ver=$(node -p "require('./package.json').version")
+          if [ "$tag_ver" != "$pkg_ver" ]; then
+            echo "::warning::tag $tag_ver differs from package.json version $pkg_ver"
+          fi
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          cp dist/translate.min.js release-assets/translate.min.js
+          cp dist/translate.min.js "release-assets/translate-${{ steps.tag.outputs.name }}.min.js"
+          (cd dist && sha256sum translate.min.js) > release-assets/SHA256SUMS
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          name: ${{ steps.tag.outputs.name }}
+          generate_release_notes: true
+          prerelease: ${{ steps.meta.outputs.prerelease }}
+          files: |
+            release-assets/translate.min.js
+            release-assets/translate-${{ steps.tag.outputs.name }}.min.js
+            release-assets/SHA256SUMS
+          body: |
+            CDN (jsDelivr) 즉시 사용 가능:
+
+            ```html
+            <script src="https://cdn.jsdelivr.net/gh/${{ github.repository }}@${{ steps.tag.outputs.name }}/dist/translate.min.js" defer></script>
+            ```
+
+            메이저 버전 고정은 `@${{ steps.tag.outputs.name }}` 대신 `@1` 형태 사용.

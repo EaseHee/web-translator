@@ -194,10 +194,23 @@ npm run serve       # docs/ 디렉터리 로컬 서빙 (http://localhost:9630)
 
 1. `src/` 수정 후 `npm run build`
 2. `dist/translate.min.js` 포함 커밋 및 푸시
-3. 릴리스 시 태그 설정: `git tag v1.0.0 && git push --tags`
-4. jsDelivr가 GitHub 태그를 자동 캐싱. 즉시 `@1`, `@1.0.0`, `@latest` URL로 접근 가능
+3. 릴리스 태그 푸시
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+4. `release.yml` 워크플로우가 자동 실행
+   - 태그 시점 소스로 재빌드
+   - `package.json` 버전과 태그 버전 불일치 시 경고
+   - GitHub Release 생성 (자동 릴리스 노트, prerelease 자동 감지)
+   - `translate.min.js`, `translate-<tag>.min.js`, `SHA256SUMS` 자산 첨부
+5. jsDelivr가 GitHub 태그를 자동 캐싱. 즉시 `@1`, `@1.0.0`, `@latest` URL로 접근 가능
 
-GitHub Actions `build.yml`이 main 푸시 시 자동 빌드 및 `dist/` 커밋.
+수동 실행은 GitHub Actions 탭 → `release` → `Run workflow` → 태그 입력.
+
+`build.yml`은 main 푸시 시 자동 빌드 및 `dist/` 커밋, `pages.yml`은 docs/dist 변경 시 GitHub Pages 자동 배포.
+
+태그 명명 규칙: `v<major>.<minor>.<patch>` (예: `v1.0.0`). `v1.0.0-beta.1`, `v1.0.0-rc.1` 형태는 자동으로 prerelease 처리.
 
 
 ## Secret 관리
