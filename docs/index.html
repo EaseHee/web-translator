@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>web-translator 데모</title>
+  <meta name="description" content="CDN 임베드 방식 웹 페이지 번역 위젯 데모 페이지">
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      line-height: 1.7;
+      color: #222;
+      background: #fafafa;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e6e6e6; background: #15151a; }
+      code, pre { background: #24242a; }
+      a { color: #82b4ff; }
+    }
+    h1 { font-size: 28px; margin-top: 0; }
+    h2 { font-size: 20px; margin-top: 2em; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+    code, pre { background: #f0f0f5; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    pre { padding: 12px; overflow-x: auto; }
+    .doc-links { font-size: 14px; opacity: .8; margin-bottom: 16px; }
+    .doc-links a + a::before { content: ' · '; }
+    button {
+      padding: 8px 14px;
+      border: 1px solid #4f8cff;
+      background: #4f8cff;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #spa-target { margin-top: 12px; padding: 12px; border: 1px dashed #888; border-radius: 6px; min-height: 24px; }
+    footer { margin-top: 60px; font-size: 13px; opacity: .7; }
+  </style>
+</head>
+<body>
+  <p class="doc-links">
+    <a href="README.md">한국어</a>
+    <a href="README.en.md">English</a>
+    <a href="README.ja.md">日本語</a>
+    <a href="README.zh-CN.md">简体中文</a>
+  </p>
+
+  <h1>web-translator 데모</h1>
+  <p>스크립트 한 줄 임베드로 동작하는 클라이언트 사이드 웹 페이지 번역 위젯. 우측 상단 드롭다운에서 언어 선택 시 본문 텍스트 노드가 실시간 교체됨.</p>
+
+  <h2>특징</h2>
+  <ul>
+    <li>API 키 불필요. 별도 서버 불필요.</li>
+    <li>jsDelivr CDN으로 무료 배포.</li>
+    <li>localStorage 캐시(TTL 7일)로 반복 요청 최소화.</li>
+    <li>MutationObserver로 SPA 동적 콘텐츠 자동 번역.</li>
+    <li>원문 언어 재선택 시 원문 복원.</li>
+  </ul>
+
+  <h2>사용법</h2>
+  <pre><code>&lt;script
+  src="https://cdn.jsdelivr.net/gh/EaseHee/web-translator@1/dist/translate.min.js"
+  data-langs="en,ja,zh-CN,es,fr"
+  data-default="ko"
+  data-position="top-right"
+  data-auto="false"
+  defer&gt;&lt;/script&gt;</code></pre>
+
+  <h2>SPA 검증</h2>
+  <p>아래 버튼을 누르면 0.5초 뒤에 새 문단이 동적으로 삽입됨. 비-원문 언어 상태라면 추가된 문단도 자동 번역.</p>
+  <button id="add-btn" type="button" data-no-translate>문단 추가</button>
+  <div id="spa-target" aria-live="polite"></div>
+
+  <h2>한계</h2>
+  <ul>
+    <li>Google Translate 비공식 endpoint 사용. SLA 없음, 차단 가능성 존재.</li>
+    <li>상용 핵심 기능에 단독 의존 비권장. 개인 블로그·데모·비핵심 페이지 권장.</li>
+    <li>차단 시 폴백(MyMemory, LibreTranslate) 가이드는 README 참조.</li>
+  </ul>
+
+  <footer>
+    MIT License · 소스: <a href="https://github.com/EaseHee/web-translator">github.com/EaseHee/web-translator</a>
+  </footer>
+
+  <script>
+    document.getElementById('add-btn').addEventListener('click', () => {
+      setTimeout(() => {
+        const p = document.createElement('p');
+        p.textContent = '동적으로 추가된 문단. MutationObserver가 감지하여 현재 선택 언어로 자동 번역.';
+        document.getElementById('spa-target').appendChild(p);
+      }, 500);
+    });
+  </script>
+
+  <script src="dist/translate.min.js"
+    data-langs="en,ja,zh-CN,es,fr,de"
+    data-default="ko"
+    data-position="top-right"
+    data-auto="false"
+    defer></script>
+</body>
+</html>

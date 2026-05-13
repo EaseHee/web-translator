@@ -1,0 +1,9 @@
+node_modules/
+docs/dist/
+dist/translate.js
+dist/translate.js.map
+.DS_Store
+*.log
+.secrets.env
+.env
+.env.local

@@ -1,0 +1,28 @@
+{
+  "name": "web-translator",
+  "version": "1.0.0",
+  "description": "CDN-embeddable client-side web page translation widget (free, serverless).",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/translate.js --bundle --minify --format=iife --target=es2018 --outfile=dist/translate.min.js --legal-comments=none",
+    "build:dev": "esbuild src/translate.js --bundle --format=iife --target=es2018 --outfile=dist/translate.js --sourcemap",
+    "watch": "esbuild src/translate.js --bundle --format=iife --target=es2018 --outfile=dist/translate.js --sourcemap --watch",
+    "serve": "mkdir -p docs/dist && cp -f dist/translate.min.js docs/dist/translate.min.js && python3 -m http.server --directory docs 9630"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EaseHee/web-translator"
+  },
+  "keywords": [
+    "translate",
+    "i18n",
+    "cdn",
+    "widget",
+    "jsdelivr",
+    "google-translate"
+  ]
+}
